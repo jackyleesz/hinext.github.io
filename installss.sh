@@ -38,6 +38,15 @@ Echo_Blue()
   echo $(Color_Text "$1" "34");
 }
 
+echo "Git clone the shadowsocksr...";
+yum install git -y
+git clone -b manyuser https://github.com/glzjin/shadowsocks.git
+
+echo "initial the shadowsocksr...";
+cd shadowsocks
+cp apiconfig.py userapiconfig.py
+cp config.json user-config.json
+cd
 
 
 echo "Install tar, wget, m2crypto, python-setuptools...";
