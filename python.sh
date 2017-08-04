@@ -5,9 +5,9 @@
  
 # install some necessary tools & libs
 echo "install some necessary tools & libs"
-yum groupinstall "Development tools"
-yum install openssl-devel zlib-devel ncurses-devel bzip2-devel readline-devel
-yum install libtool-ltdl-devel sqlite-devel tk-devel tcl-devel
+yum groupinstall "Development tools" -y
+yum install openssl-devel zlib-devel ncurses-devel bzip2-devel readline-devel -y
+yum install libtool-ltdl-devel sqlite-devel tk-devel tcl-devel -y
 sleep 5
  
 # download and install python
