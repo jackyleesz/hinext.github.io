@@ -67,12 +67,15 @@ echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 ldconfig
 
 echo "Install supervisord ...";
-rpm -Uvh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm --quiet
-yum -y install supervisor python-pip
-pip install supervisor==3.1
+pip install supervisor
 chkconfig supervisord on
+git clone https://github.com/Supervisor/meld3
+cd meld3
+python setup.py install
+cd
 wget https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord.conf -O /etc/supervisord.conf
 wget https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord -O /etc/init.d/supervisord
+chmod +x /etc/init.d/supervisord
 
 
 clear
@@ -82,4 +85,4 @@ Echo_Blue "Nice Day :)";
 
 
 # 删除自身
-rm -rf /root/install.sh;
+rm -rf /root/installss.sh;
