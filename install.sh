@@ -57,7 +57,6 @@ cd
 echo "Install tar, wget, m2crypto, python-setuptools...";
 yum install tar wget m2crypto python-setuptools gcc -y
 easy_install pip
-pip install cymysql
 
 echo "Clear the iptables...";
 iptables -F
