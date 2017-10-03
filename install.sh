@@ -75,4 +75,4 @@ Echo_Blue "Nice Day :)";
 
 
 # 删除自身
-rm -rf /root/installss.sh;
+rm -rf /root/install.sh;
