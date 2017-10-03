@@ -38,6 +38,11 @@ Echo_Blue()
   echo $(Color_Text "$1" "34");
 }
 
+
+echo "Install tar, wget, m2crypto, python-setuptools...";
+yum install tar wget m2crypto python-setuptools gcc -y
+easy_install pip
+
 echo "Git clone the shadowsocksr...";
 yum install git -y
 git clone -b manyuser https://github.com/glzjin/shadowsocks.git
@@ -54,9 +59,6 @@ pip install -r requirements.txt
 cd
 
 
-echo "Install tar, wget, m2crypto, python-setuptools...";
-yum install tar wget m2crypto python-setuptools gcc -y
-easy_install pip
 
 echo "Clear the iptables...";
 iptables -F
