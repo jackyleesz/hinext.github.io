@@ -66,16 +66,6 @@ tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 ldconfig
 
-echo "Install supervisord ...";
-pip install supervisor
-chkconfig supervisord on
-git clone https://github.com/Supervisor/meld3
-cd meld3
-python setup.py install
-cd
-wget https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord.conf -O /etc/supervisord.conf
-wget https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord -O /etc/init.d/supervisord
-chmod +x /etc/init.d/supervisord
 
 
 clear
