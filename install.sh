@@ -46,6 +46,11 @@ echo "initial the shadowsocksr...";
 cd shadowsocks
 cp apiconfig.py userapiconfig.py
 cp config.json user-config.json
+
+yum -y install python-devel
+yum -y install libffi-devel
+yum -y install openssl-devel
+pip install -r requirements.txt
 cd
 
 
