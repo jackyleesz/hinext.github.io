@@ -2,6 +2,39 @@
 #Check Root
 [ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
 
+
+install_ServerSpeeder(){
+	clear
+	echo
+	echo "#############################################################"
+	echo "#              One click Install ServerSpeeder               #"
+	echo "#                   Author: 404found                        #"
+	echo "#############################################################"
+	echo
+	
+	#install ServerSpeeder
+    wget --no-check-certificate -O appex.sh https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh && chmod +x appex.sh && bash appex.sh install
+
+}
+
+change_kernel(){
+	clear
+	echo
+	echo "#############################################################"
+	echo "#                 One click Change Kernel                   #"
+	echo "#                   Author: 404found                        #"
+	echo "#############################################################"
+	echo
+	
+	wget -N --no-check-certificate  https://raw.githubusercontent.com/hinext/hinext.github.io/master/kernel-2.6.32-504.3.3.el6.x86_64.rpm
+
+    rpm -ivh kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
+	
+	reboot now
+}
+
+
+
 #自动选择libsodium下载节点
 GIT='raw.githubusercontent.com'
 LIB='download.libsodium.org'
@@ -141,7 +174,7 @@ install_node(){
 	#clear iptables
 	iptables -F
 	service iptables save
-
+	clear
 	echo "#############################################################"
 	echo "#             It has been finished, enjoy it!               #"
 	echo "#                     Nice Day :)                           #"
@@ -149,20 +182,22 @@ install_node(){
 }
 echo
 echo "#############################################################"
-echo "# One click Install SS-panel and Shadowsocks-Py-Mu          #"
-echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
-echo "# Author: 91vps                                             #"
+echo "#                  One click Install Script                 #"
 echo "# Please choose the server you want                         #"
-echo "# 1  SS-V3_mod_panel and node One click Install             #"
-echo "# 2  SS-node One click Install                              #"
+echo "# 1  change_kernel                                          #"
+echo "# 2  install_ServerSpeeder                                  #"
+echo "# 3  SSR One click Install                                  #"
 echo "#############################################################"
 echo
-stty erase '^H' && read -p " 请输入数字 [1-2]:" num
+stty erase '^H' && read -p " 请输入数字 [1-3]:" num
 case "$num" in
 	1)
-	install_panel_and_node
+	change_kernel
 	;;
 	2)
+	install_ServerSpeeder
+	;;
+	3)
 	install_node
 	;;
 	*)
