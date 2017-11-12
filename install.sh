@@ -147,18 +147,20 @@ install_node(){
 	echo "#                     Nice Day :)                           #"
 	echo "#############################################################"
 }
-
-
 echo
 echo "#############################################################"
-echo "#            One click Install ShadowsocksR                 #"
-echo "#                   Author: 404found                        #"
+echo "# One click Install SS-panel and Shadowsocks-Py-Mu          #"
+echo "# Github: https://github.com/mmmwhy/ss-panel-and-ss-py-mu   #"
+echo "# Author: 91vps                                             #"
+echo "# Please choose the server you want                         #"
+echo "# 1  SS-V3_mod_panel and node One click Install             #"
+echo "# 2  SS-node One click Install                              #"
 echo "#############################################################"
 echo
 stty erase '^H' && read -p " 请输入数字 [1-2]:" num
 case "$num" in
 	1)
-	待定
+	install_panel_and_node
 	;;
 	2)
 	install_node
