@@ -63,11 +63,6 @@ install_centos_ssr(){
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
-	mkdir python && cd python
-	wget --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/python.zip
-	unzip python.zip
-	pip install *.whl
-	pip install *.tar.gz
 	
 	#install supervisord
 	
@@ -96,7 +91,7 @@ install_centos_ssr(){
 	cp config.json user-config.json
 }
 install_ubuntu_ssr(){
-	apt-get install wget lsof build-essential python-m2crypto supervisor git -y
+	apt-get install wget python-pip  build-essential python-m2crypto supervisor git vim -y
 
 	#install libsodium	
 	wget --no-check-certificate $libAddr
@@ -117,7 +112,16 @@ install_ubuntu_ssr(){
 	cp config.json user-config.json
 }
 
-
+start_supervisord(){
+	check_sys
+	if [[ ${release} = "centos" ]]; then			
+		service supervisord start
+	else
+		supervisord -c/etc/supervisord.conf
+		service supervisor start 
+		supervisorctl reload 
+	fi
+}
 
 install_node(){
 	clear
@@ -166,9 +170,8 @@ install_node(){
 	cd /root/shadowsocks
 
 	
-	# 启用supervisord
-	echo_supervisord_conf > /etc/supervisord.conf
-    sed -i '$a [program:ssr]\ncommand = python /root/shadowsocks/server.py\nuser = root\nautostart = true\nautorestart = true' /etc/supervisord.conf
+	# 下载 supervisord 配置文件
+	wget --no-check-certificate https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord.conf -O /etc/supervisord.conf
 	wget  --no-check-certificate https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord -O /etc/init.d/supervisord
 
 	#clear iptables
@@ -187,9 +190,10 @@ echo "# Please choose the server you want                         #"
 echo "# 1  change_kernel                                          #"
 echo "# 2  install_ServerSpeeder                                  #"
 echo "# 3  SSR One click Install                                  #"
+echo "# 4  Start Supervisord                                      #"
 echo "#############################################################"
 echo
-stty erase '^H' && read -p " 请输入数字 [1-3]:" num
+stty erase '^H' && read -p " 请输入数字 [1-4]:" num
 case "$num" in
 	1)
 	change_kernel
@@ -200,7 +204,13 @@ case "$num" in
 	3)
 	install_node
 	;;
+	4)
+	start_supervisord
+	;;
 	*)
-	echo "请输入正确数字 [1-2]"
+	echo "请输入正确数字 [1-4]"
 	;;
 esac
+
+
+
