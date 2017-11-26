@@ -10,7 +10,7 @@
     "udp_timeout": 60,
     "method": "aes-256-cfb",
     "protocol": "auth_aes128_md5",
-    "protocol_param": "2",
+    "protocol_param": "5",
     "obfs": "tls1.2_ticket_auth_compatible",
     "obfs_param": "",
     "speed_limit_per_con": 0,
