@@ -180,10 +180,7 @@ install_centos_ssr(){
 		systemctl enable iptables.service
 		systemctl start iptables.service
 	fi
-		
-	#配置文件
-	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json	-O /root/shadowsocks/user-config.json 
-	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py	-O /root/shadowsocks/userapiconfig.py
+	
 
 }
 install_ubuntu_ssr(){
@@ -201,10 +198,6 @@ install_ubuntu_ssr(){
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git
 	cd shadowsocks
 	pip install -r requirements.txt
-	
-	#配置文件
-	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json	-O /root/shadowsocks/user-config.json 
-	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py	-O /root/shadowsocks/userapiconfig.py
  
 }
 
