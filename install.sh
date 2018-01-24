@@ -120,18 +120,7 @@ install_centos_ssr(){
     pip install supervisor
 
 	fi
-	#第三次检测pip supervisor是否安装成功
-	if [ -z "`pip`" ]; then
-		if [ -z "`easy_install`"]; then
-    wget http://peak.telecommunity.com/dist/ez_setup.py
-		python ez_setup.py
-		fi		
-		easy_install pip
-	fi
-	if [ -z "`ps aux|grep supervisord|grep python`" ]; then
-    easy_install supervisor
 
-	fi
 	pip install --upgrade pip
 	Libtest
 	wget --no-check-certificate $libAddr
@@ -142,11 +131,10 @@ install_centos_ssr(){
 	
 	#clone shadowsocks
 	cd /root
-	rm -rf python
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git
 
 	cd /root/shadowsocks
-	chkconfig supervisord on
+
 	#第一次安装
 	python_test
 	pip install -r requirements.txt -i $pyAddr	
@@ -155,25 +143,7 @@ install_centos_ssr(){
 	if [ -z "$answer" ]; then
 		pip install -r requirements.txt #用自带的源试试再装一遍
 	fi
-	#第三次检测是否成功
-	source_test
-	if [ -z "$answer" ]; then
-		mkdir python && cd python
-		git clone https://github.com/shazow/urllib3.git && cd urllib3
-		python setup.py install && cd ..
-		git clone https://github.com/nakagami/CyMySQL.git && cd CyMySQL
-		python setup.py install && cd ..
-		git clone https://github.com/requests/requests.git && cd requests
-		python setup.py install && cd ..
-		git clone https://github.com/pyca/pyopenssl.git && cd pyopenssl
-		python setup.py install && cd ..
-		git clone https://github.com/cedadev/ndg_httpsclient.git && cd ndg_httpsclient
-		python setup.py install && cd ..
-		git clone https://github.com/etingof/pyasn1.git && cd pyasn1
-		python setup.py install && cd ..
-		rm -rf python
-	fi	
-	
+
 	if [ $Version == "7" ]; then
 		systemctl stop firewalld.service
 		systemctl disable firewalld.service
