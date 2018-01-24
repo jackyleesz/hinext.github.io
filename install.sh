@@ -201,11 +201,7 @@ install_ubuntu_ssr(){
 	cd shadowsocks
 	pip install -r requirements.txt
 
-	# 配置程序
-	#cp apiconfig.py userapiconfig.py
-	#cp config.json user-config.json
-	wget https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json	 -O /root/shadowsocks/user-config.json
-	wget https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py	--no-check-certificate	-O /root/shadowsocks/userapiconfig.py  
+ 
 }
 
 start_supervisord(){
