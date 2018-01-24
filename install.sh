@@ -181,6 +181,9 @@ install_centos_ssr(){
 		systemctl start iptables.service
 	fi
 		
+	#配置文件
+	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json	-O /root/shadowsocks/user-config.json 
+	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py	-O /root/shadowsocks/userapiconfig.py
 
 }
 install_ubuntu_ssr(){
@@ -198,7 +201,10 @@ install_ubuntu_ssr(){
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git
 	cd shadowsocks
 	pip install -r requirements.txt
-
+	
+	#配置文件
+	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json	-O /root/shadowsocks/user-config.json 
+	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py	-O /root/shadowsocks/userapiconfig.py
  
 }
 
@@ -259,11 +265,7 @@ install_node(){
 	
 	install_ssr_for_each
 
-    # modify Config	
-	cd /root/shadowsocks
-	
-	# 停止supervisord
-	supervisorctl shutdown
+
 
 	# 下载 supervisord 配置文件
 	wget https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord.conf	-O /etc/supervisord.conf	 
