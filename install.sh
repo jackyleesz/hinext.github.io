@@ -181,9 +181,7 @@ install_centos_ssr(){
 		systemctl start iptables.service
 	fi
 		
-	#配置文件
-	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json	-O /root/shadowsocks/user-config.json 
-	wget	https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py	-O /root/shadowsocks/userapiconfig.py
+
 }
 install_ubuntu_ssr(){
 	apt-get -y install python python-dev python-pip python-m2crypto curl wget unzip gcc swig automake make perl cpio build-essential git ntpdate vim
