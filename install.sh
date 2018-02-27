@@ -63,11 +63,6 @@ install_centos_ssr(){
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
-	mkdir python && cd python
-	wget --no-check-certificate https://raw.githubusercontent.com/mmmwhy/ss-panel-and-ss-py-mu/master/python.zip
-	unzip python.zip
-	pip install *.whl
-	pip install *.tar.gz
 	
 	#install supervisord
 	
@@ -113,8 +108,8 @@ install_ubuntu_ssr(){
 	pip install -r requirements.txt
 
 	# 配置程序
-	cp apiconfig.py userapiconfig.py
-	cp config.json user-config.json
+	wget https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json	-O /root/shadowsocks/user-config.json	 
+	wget https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py	-O /root/shadowsocks/userapiconfig.py
 }
 
 
