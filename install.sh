@@ -87,8 +87,11 @@ install_centos_ssr(){
 	#systemctl stop firewalld.service
 	#systemctl disable firewalld.service
 	# 配置程序
-	cp apiconfig.py userapiconfig.py
-	cp config.json user-config.json
+    cd shadowsocks
+	wget https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json	 
+	wget https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py
+	
+	
 }
 install_ubuntu_ssr(){
 	apt-get install wget lsof build-essential python-m2crypto supervisor git -y
