@@ -100,29 +100,6 @@ install_centos_ssr(){
 	yum -y groupinstall "Development Tools" 
 	#第一次yum安装 supervisor pip
 	yum -y install supervisor python-pip
-	supervisord
-	#第二次pip supervisor是否安装成功
-	if [ -z "`pip`" ]; then
-    curl -O https://bootstrap.pypa.io/get-pip.py
-		python get-pip.py 
-		rm -rf *.py
-	fi
-	if [ -z "`ps aux|grep supervisord|grep python`" ]; then
-    pip install supervisor
-    supervisord
-	fi
-	#第三次检测pip supervisor是否安装成功
-	if [ -z "`pip`" ]; then
-		if [ -z "`easy_install`"]; then
-    wget http://peak.telecommunity.com/dist/ez_setup.py
-		python ez_setup.py
-		fi		
-		easy_install pip
-	fi
-	if [ -z "`ps aux|grep supervisord|grep python`" ]; then
-    easy_install supervisor
-    supervisord
-	fi
 	pip install --upgrade pip
 	Libtest
 	wget --no-check-certificate $libAddr
