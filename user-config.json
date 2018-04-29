@@ -10,7 +10,7 @@
     "udp_timeout": 60,
     "method": "aes-256-cfb",
     "protocol": "auth_aes128_md5",
-    "protocol_param": "5",
+    "protocol_param": "3",
     "obfs": "tls1.2_ticket_auth_compatible",
     "obfs_param": "",
     "speed_limit_per_con": 0,
@@ -18,7 +18,7 @@
     "dns_ipv6": false,
     "connect_verbose_info": 0,
     "connect_hex_data": 0,
-    "redirect": ["*:*#msn.com:80"],
+    "redirect": ["*:543#HK2SCH130021464.wns.windows.com:443","*:443#HK2SCH130021464.wns.windows.com:443","*:80#HK2SCH130021464.wns.windows.com:80"],
     "fast_open": false,
     "friendly_detect": 1
 }

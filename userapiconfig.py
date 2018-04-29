@@ -8,7 +8,7 @@ CLOUDSAFE = 1
 ANTISSATTACK = 0
 AUTOEXEC = 0
 
-MU_SUFFIX = 'hku.hk'
+MU_SUFFIX = 'wns.windows.com'
 MU_REGEX = '%5m%id.%suffix'
 
 SERVER_PUB_ADDR = '127.0.0.1'  # mujson_mgr need this to generate ssr link
