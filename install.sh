@@ -125,7 +125,7 @@ install_centos_ssr(){
 	
 	#clone shadowsocks
 	cd /root
-	git clone -b master https://github.com/hinext/shadowsocksmod.git
+	git clone -b master https://github.com/hinext/shadowsocks.git
 
 	cd /root/shadowsocks
 
