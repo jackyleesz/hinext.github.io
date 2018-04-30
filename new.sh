@@ -43,7 +43,7 @@ echo "|                    Shadowsocks server for CentOS                    |";
 echo "+--------------------------------------------------------------------+";
 
 # 输入节点ID
-Echo_Yellow "Set the database connect port. (Default: 3306)";
+Echo_Yellow "Set the NodeID. (Default: 1)";
 read -p "Please enter: " _NODEID_;
 if [ "${_NODEID_}" = "" ]; then
     _PORT_="1";
@@ -54,13 +54,6 @@ Echo_Yellow "Set the database hostname. (Default: 127.0.0.1)";
 read -p "Please enter: " _HOSTNAME_;
 if [ "${_HOSTNAME_}" = "" ]; then
     _HOSTNAME_="127.0.0.1";
-fi
-
-# 输入数据库连接端口
-Echo_Yellow "Set the database connect port. (Default: 3306)";
-read -p "Please enter: " _PORT_;
-if [ "${_PORT_}" = "" ]; then
-    _PORT_="3306";
 fi
 
 # 输入数据库名称
