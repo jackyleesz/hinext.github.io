@@ -216,64 +216,7 @@ install_node(){
 	install_ssr_for_each
 
 	cd /root/shadowsocks
-# 输入节点ID
-Echo_Yellow "Set the database connect port. (Default: 3306)";
-read -p "Please enter: " _NODEID_;
-if [ "${_NODEID_}" = "" ]; then
-    _PORT_="1";
-fi
 
-# 输入数据库主机名
-Echo_Yellow "Set the database hostname. (Default: 127.0.0.1)";
-read -p "Please enter: " _HOSTNAME_;
-if [ "${_HOSTNAME_}" = "" ]; then
-    _HOSTNAME_="127.0.0.1";
-fi
-
-# 输入数据库连接端口
-Echo_Yellow "Set the database connect port. (Default: 3306)";
-read -p "Please enter: " _PORT_;
-if [ "${_PORT_}" = "" ]; then
-    _PORT_="3306";
-fi
-
-# 输入数据库名称
-while [ "${_DATABASE_}" = "" ]
-do
-  Echo_Yellow "Set the database name.";
-  read -p "Please enter: " _DATABASE_;
-done
-
-# 输入数据库用户名
-while [ "${_USERNAME_}" = "" ]
-do
-  Echo_Yellow "Set the database username.";
-  read -p "Please enter: " _USERNAME_;
-done
-
-# 输入数据库登录密码
-while [ "${_PASSWORD_}" = "" ]
-do
-  Echo_Yellow "Set the database password.";
-  read -p "Please enter: " _PASSWORD_;
-done
-
-clear
-Echo_Green "Database: `Echo_Yellow "${_DATABASE_}"`";
-Echo_Green "Username: `Echo_Yellow "${_USERNAME_}"`";
-Echo_Green "Password: `Echo_Yellow "${_PASSWORD_}"`";
-Echo_Green "Hostname: `Echo_Yellow "${_HOSTNAME_}"`";
-Echo_Green "Hostname: `Echo_Yellow "${_NODEID_}"`";
-echo "";
-Echo_Blue "Press any key to modify...";
-
-
-echo "Modify the configuration...";
-sed -i "s#"_DATABASE_"#"${_DATABASE_}"#g" /root/shadowsocks/userapiconfig.py;
-sed -i "s#"_USERNAME_"#"${_USERNAME_}"#g" /root/shadowsocks/userapiconfig.py;
-sed -i "s#"_PASSWORD_"#"${_PASSWORD_}"#g" /root/shadowsocks/userapiconfig.py;
-sed -i "s#"_HOSTNAME_"#"${_HOSTNAME_}"#g" /root/shadowsocks/userapiconfig.py;
-sed -i "s#"_NODEID_"#"${_NODEID_}"#g" /root/shadowsocks/userapiconfig.py;
 	
 	
 	
