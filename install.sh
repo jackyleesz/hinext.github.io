@@ -125,7 +125,7 @@ install_centos_ssr(){
 	
 	#clone shadowsocks
 	cd /root
-	git clone -b manyuser https://github.com/glzjin/shadowsocks.git
+	git clone -b master https://github.com/hinext/shadowsocksmod.git
 
 	cd /root/shadowsocks
 
@@ -216,10 +216,6 @@ install_node(){
 	install_ssr_for_each
 
 	cd /root/shadowsocks
-
-	
-	
-	
 
 	# 下载 supervisord 配置文件
 	wget https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord.conf	-O /etc/supervisord.conf	 
