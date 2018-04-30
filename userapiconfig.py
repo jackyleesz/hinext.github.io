@@ -1,11 +1,10 @@
 ﻿# Config
-NODE_ID = 1
-
+NODE_ID = _NODEID_
 
 # hour,set 0 to disable
 SPEEDTEST = 0
 CLOUDSAFE = 1
-ANTISSATTACK = 0
+ANTISSATTACK = 1
 AUTOEXEC = 0
 
 MU_SUFFIX = 'wns.windows.com'
@@ -21,11 +20,11 @@ WEBAPI_TOKEN = 'glzjin'
 MUDB_FILE = 'mudb.json'
 
 # Mysql
-MYSQL_HOST = '127.0.0.1'
+MYSQL_HOST = '_HOSTNAME_'
 MYSQL_PORT = 3306
-MYSQL_USER = 'ss'
-MYSQL_PASS = 'ss'
-MYSQL_DB = 'shadowsocks'
+MYSQL_USER = '_USERNAME_'
+MYSQL_PASS = '_PASSWORD_'
+MYSQL_DB = '_DATABASE_'
 
 MYSQL_SSL_ENABLE = 0
 MYSQL_SSL_CA = ''

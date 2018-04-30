@@ -45,9 +45,9 @@ Libtest(){
 	echo "$LIB_PING $LIB" >> ping.pl
 	libAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
 	if [ "$libAddr" == "$GIT" ];then
-		libAddr='https://github.com/jedisct1/libsodium/releases/download/1.0.13/libsodium-1.0.13.tar.gz'
+		libAddr='https://github.com/jedisct1/libsodium/releases/download/1.0.16/libsodium-1.0.16.tar.gz'
 	else
-		libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz'
+		libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz'
 	fi
 	rm -f ping.pl		
 }
@@ -107,24 +107,18 @@ install_centos_ssr(){
 	fi
 	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel ntpdate iptables
 	yum -y groupinstall "Development Tools" 
-	#第一次yum安装 supervisor pip
-	yum -y install supervisor python-pip
-
-	#第二次pip supervisor是否安装成功
-	if [ -z "`pip`" ]; then
-    curl -O https://bootstrap.pypa.io/get-pip.py
-		python get-pip.py 
-		rm -rf *.py
-	fi
-	if [ -z "`ps aux|grep supervisord|grep python`" ]; then
-    pip install supervisor
-
-	fi
-
+	
+	#安装 pip
+	
+	curl -O https://bootstrap.pypa.io/get-pip.py
+	python get-pip.py 
+	rm -rf *.py
+	
+	
 	pip install --upgrade pip
 	Libtest
 	wget --no-check-certificate $libAddr
-	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
+	tar xf libsodium-1.0.16.tar.gz && cd libsodium-1.0.16
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
@@ -135,14 +129,10 @@ install_centos_ssr(){
 
 	cd /root/shadowsocks
 
-	#第一次安装
+	#安装requirements.txt
 	python_test
 	pip install -r requirements.txt -i $pyAddr	
-	#第二次检测是否安装成功
-	source_test
-	if [ -z "$answer" ]; then
-		pip install -r requirements.txt #用自带的源试试再装一遍
-	fi
+
 
 	if [ $Version == "7" ]; then
 		systemctl stop firewalld.service
@@ -151,13 +141,21 @@ install_centos_ssr(){
 		systemctl start iptables.service
 	fi
 	
-
+	#改成北京时间
+    #function check_datetime(){
+	#rm -rf /etc/localtime
+	#ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+	#ntpdate cn.pool.ntp.org
+	#}
+	
+	
+	
 }
 install_ubuntu_ssr(){
 	apt-get -y install python python-dev python-pip python-m2crypto curl wget unzip gcc swig automake make perl cpio build-essential git ntpdate vim
 	#install libsodium	
 	wget --no-check-certificate $libAddr
-	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
+	tar xf libsodium-1.0.16.tar.gz && cd libsodium-1.0.16
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
@@ -171,18 +169,12 @@ install_ubuntu_ssr(){
  
 }
 
-start_supervisord(){
-
-supervisord
-
-}
 
 install_node(){
 	clear
 	echo
 	echo "#############################################################"
 	echo "#              One click Install ShadowsocksR               #"
-	echo "#                   Author: 404found                        #"
 	echo "#############################################################"
 	echo
 	#Check Root
@@ -215,12 +207,7 @@ install_node(){
 		fi
 	}
 	
-	#改成北京时间
-	# function check_datetime(){
-	# rm -rf /etc/localtime
-	# ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-	# ntpdate time.windows.com
-	# }
+
 
 	# 系统优化
 	sed -i '$a * hard nofile 51200\n* soft nofile 51200' /etc/security/limits.conf	
@@ -228,7 +215,68 @@ install_node(){
 	
 	install_ssr_for_each
 
+	cd /root/shadowsocks
+# 输入节点ID
+Echo_Yellow "Set the database connect port. (Default: 3306)";
+read -p "Please enter: " _NODEID_;
+if [ "${_NODEID_}" = "" ]; then
+    _PORT_="1";
+fi
 
+# 输入数据库主机名
+Echo_Yellow "Set the database hostname. (Default: 127.0.0.1)";
+read -p "Please enter: " _HOSTNAME_;
+if [ "${_HOSTNAME_}" = "" ]; then
+    _HOSTNAME_="127.0.0.1";
+fi
+
+# 输入数据库连接端口
+Echo_Yellow "Set the database connect port. (Default: 3306)";
+read -p "Please enter: " _PORT_;
+if [ "${_PORT_}" = "" ]; then
+    _PORT_="3306";
+fi
+
+# 输入数据库名称
+while [ "${_DATABASE_}" = "" ]
+do
+  Echo_Yellow "Set the database name.";
+  read -p "Please enter: " _DATABASE_;
+done
+
+# 输入数据库用户名
+while [ "${_USERNAME_}" = "" ]
+do
+  Echo_Yellow "Set the database username.";
+  read -p "Please enter: " _USERNAME_;
+done
+
+# 输入数据库登录密码
+while [ "${_PASSWORD_}" = "" ]
+do
+  Echo_Yellow "Set the database password.";
+  read -p "Please enter: " _PASSWORD_;
+done
+
+clear
+Echo_Green "Database: `Echo_Yellow "${_DATABASE_}"`";
+Echo_Green "Username: `Echo_Yellow "${_USERNAME_}"`";
+Echo_Green "Password: `Echo_Yellow "${_PASSWORD_}"`";
+Echo_Green "Hostname: `Echo_Yellow "${_HOSTNAME_}"`";
+Echo_Green "Hostname: `Echo_Yellow "${_NODEID_}"`";
+echo "";
+Echo_Blue "Press any key to modify...";
+
+
+echo "Modify the configuration...";
+sed -i "s#"_DATABASE_"#"${_DATABASE_}"#g" /root/shadowsocks/userapiconfig.py;
+sed -i "s#"_USERNAME_"#"${_USERNAME_}"#g" /root/shadowsocks/userapiconfig.py;
+sed -i "s#"_PASSWORD_"#"${_PASSWORD_}"#g" /root/shadowsocks/userapiconfig.py;
+sed -i "s#"_HOSTNAME_"#"${_HOSTNAME_}"#g" /root/shadowsocks/userapiconfig.py;
+sed -i "s#"_NODEID_"#"${_NODEID_}"#g" /root/shadowsocks/userapiconfig.py;
+	
+	
+	
 
 	# 下载 supervisord 配置文件
 	wget https://raw.githubusercontent.com/hinext/hinext.github.io/master/supervisord.conf	-O /etc/supervisord.conf	 
@@ -238,8 +286,7 @@ install_node(){
 	iptables -F
 	service iptables save
 	
-	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
-	chmod +x /etc/rc.d/rc.local
+
 	clear
 	echo "#############################################################"
 	echo "#             It has been finished, enjoy it!               #"
@@ -253,10 +300,9 @@ echo "# Please choose the server you want                         #"
 echo "# 1  change_kernel                                          #"
 echo "# 2  install_ServerSpeeder                                  #"
 echo "# 3  SSR One click Install                                  #"
-echo "# 4  Start Supervisord                                      #"
 echo "#############################################################"
 echo
-stty erase '^H' && read -p " 请输入数字 [1-4]:" num
+stty erase '^H' && read -p " 请输入数字 [1-3]:" num
 case "$num" in
 	1)
 	change_kernel
@@ -267,11 +313,8 @@ case "$num" in
 	3)
 	install_node
 	;;
-	4)
-	start_supervisord
-	;;
 	*)
-	echo "请输入正确数字 [1-4]"
+	echo "请输入正确数字 [1-3]"
 	;;
 esac
 
