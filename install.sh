@@ -105,8 +105,9 @@ install_centos_ssr(){
 		wget --no-check-certificate https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 		rpm -ivh epel-release-latest-6.noarch.rpm
 	fi
-	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel ntpdate iptables
+	yum -y install git gcc python-setuptools lsof python-pip python-devel libffi-devel openssl-devel ntpdate iptables
 	yum -y groupinstall "Development Tools" 
+
 	
 	pip install cymysql
 	
