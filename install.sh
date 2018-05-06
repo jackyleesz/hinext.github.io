@@ -108,6 +108,8 @@ install_centos_ssr(){
 	yum -y install git gcc python-setuptools lsof lrzsz python-devel libffi-devel openssl-devel ntpdate iptables
 	yum -y groupinstall "Development Tools" 
 	
+	pip install cymysql
+	
 	#安装 pip
 	
 	curl -O https://bootstrap.pypa.io/get-pip.py
@@ -148,8 +150,9 @@ install_centos_ssr(){
 	#ntpdate cn.pool.ntp.org
 	#}
 	
-	
-	
+	#下载配置文件
+	wget -N -P  /root/shadowsocks/ --no-check-certificate  https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json
+	wget -N -P  /root/shadowsocks/ --no-check-certificate  https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py
 }
 install_ubuntu_ssr(){
 	apt-get -y install python python-dev python-pip python-m2crypto curl wget unzip gcc swig automake make perl cpio build-essential git ntpdate vim
@@ -167,6 +170,10 @@ install_ubuntu_ssr(){
 	cd shadowsocks
 	pip install -r requirements.txt
  
+ 
+ 	#下载配置文件
+	wget -N -P  /root/shadowsocks/ --no-check-certificate  https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/user-config.json
+	wget -N -P  /root/shadowsocks/ --no-check-certificate  https://raw.githubusercontent.com/hinext/hinext.github.io/new_master/userapiconfig.py
 }
 
 
