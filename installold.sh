@@ -109,7 +109,9 @@ install_ubuntu_ssr(){
 	cd /root
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git
 	cd shadowsocks
-	pip install -r requirements.txt
+	yum -y install python-devel
+	yum -y install libffi-devel
+	yum -y install openssl-devel
  
 
 }
