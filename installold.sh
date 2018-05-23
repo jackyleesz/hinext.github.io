@@ -52,48 +52,6 @@ Libtest(){
 	rm -f ping.pl		
 }
 
-Get_Dist_Version()
-{
-    if [ -s /usr/bin/python3 ]; then
-        Version=`/usr/bin/python3 -c 'import platform; print(platform.linux_distribution()[1][0])'`
-    elif [ -s /usr/bin/python2 ]; then
-        Version=`/usr/bin/python2 -c 'import platform; print platform.linux_distribution()[1][0]'`
-    fi
-}
-python_test(){
-	#测速决定使用哪个源
-	tsinghua='pypi.tuna.tsinghua.edu.cn'
-	pypi='mirror-ord.pypi.io'
-	doubanio='pypi.doubanio.com'
-	pubyun='pypi.pubyun.com'	
-	tsinghua_PING=`ping -c 1 -w 1 $tsinghua|grep time=|awk '{print $7}'|sed "s/time=//"`
-	pypi_PING=`ping -c 1 -w 1 $pypi|grep time=|awk '{print $7}'|sed "s/time=//"`
-	doubanio_PING=`ping -c 1 -w 1 $doubanio|grep time=|awk '{print $7}'|sed "s/time=//"`
-	pubyun_PING=`ping -c 1 -w 1 $pubyun|grep time=|awk '{print $7}'|sed "s/time=//"`
-	echo "$tsinghua_PING $tsinghua" > ping.pl
-	echo "$pypi_PING $pypi" >> ping.pl
-	echo "$doubanio_PING $doubanio" > ping.pl
-	echo "$pubyun_PING $pubyun" >> ping.pl
-	pyAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
-	if [ "$pyAddr" == "$tsinghua" ]; then
-		pyAddr='https://pypi.tuna.tsinghua.edu.cn/simple'
-	elif [ "$pyAddr" == "$pypi" ]; then
-		pyAddr='https://mirror-ord.pypi.io/simple'
-	elif [ "$pyAddr" == "$doubanio" ]; then
-		pyAddr='http://pypi.doubanio.com/simple --trusted-host pypi.doubanio.com'
-	elif [ "$pyAddr" == "$pubyun_PING" ]; then
-		pyAddr='http://pypi.pubyun.com/simple --trusted-host pypi.pubyun.com'
-	fi
-	rm -f ping.pl
-}
-source_test()
-{
-    if [ -s /usr/bin/python3 ]; then
-        answer=`/usr/bin/python3 -c 'import requests;print(requests)'`
-    elif [ -s /usr/bin/python2 ]; then
-        answer=`/usr/bin/python2 -c 'import requests;print(requests)'`
-    fi
-}
 	
 install_centos_ssr(){
 	cd /root
@@ -105,21 +63,12 @@ install_centos_ssr(){
 		wget --no-check-certificate https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 		rpm -ivh epel-release-latest-6.noarch.rpm
 	fi
-	yum -y install git gcc python-setuptools lsof python-devel libffi-devel openssl-devel ntpdate iptables
+	yum -y install git gcc lsof python-devel libffi-devel openssl-devel ntpdate iptables
 	yum -y groupinstall "Development Tools" 
+	yum -y install python-setuptools && easy_install pip==9.0.1
+	
+	pip install cymysql==0.9.4
 
-	
-	pip install cymysql
-	
-	#安装 pip
-	
-	curl -O https://bootstrap.pypa.io/get-pip.py
-	python get-pip.py 
-	rm -rf *.py
-	
-	
-	pip install --upgrade pip
-	Libtest
 	wget --no-check-certificate $libAddr
 	tar xf libsodium-1.0.16.tar.gz && cd libsodium-1.0.16
 	./configure && make -j2 && make install
@@ -156,7 +105,7 @@ install_ubuntu_ssr(){
 	ldconfig
 	#install pip
 	apt-get install python-pip -y
-	pip install cymysql
+	pip install cymysql==0.9.4
 	cd /root
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git
 	cd shadowsocks
