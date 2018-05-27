@@ -33,25 +33,6 @@ change_kernel(){
 	reboot now
 }
 
-
-
-Libtest(){
-	#自动选择libsodium下载节点
-	GIT='raw.githubusercontent.com'
-	LIB='download.libsodium.org'
-	GIT_PING=`ping -c 1 -w 1 $GIT|grep time=|awk '{print $7}'|sed "s/time=//"`
-	LIB_PING=`ping -c 1 -w 1 $LIB|grep time=|awk '{print $7}'|sed "s/time=//"`
-	echo "$GIT_PING $GIT" > ping.pl
-	echo "$LIB_PING $LIB" >> ping.pl
-	libAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
-	if [ "$libAddr" == "$GIT" ];then
-		libAddr='https://github.com/jedisct1/libsodium/releases/download/1.0.16/libsodium-1.0.16.tar.gz'
-	else
-		libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz'
-	fi
-	rm -f ping.pl		
-}
-
 	
 install_centos_ssr(){
 	cd /root
@@ -69,8 +50,8 @@ install_centos_ssr(){
 	
 	pip install cymysql==0.9.4
 
-	wget --no-check-certificate $libAddr
-	tar xf libsodium-1.0.16.tar.gz && cd libsodium-1.0.16
+	wget --no-check-certificate https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
+	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
@@ -81,25 +62,13 @@ install_centos_ssr(){
 
 	cd /root/shadowsocks
 
-	#安装requirements.txt
-	python_test
-	pip install -r requirements.txt -i $pyAddr	
-
-
-	if [ $Version == "7" ]; then
-		systemctl stop firewalld.service
-		systemctl disable firewalld.service
-		systemctl enable iptables.service
-		systemctl start iptables.service
-	fi
-	
 
 }
 install_ubuntu_ssr(){
 	apt-get -y install python python-dev python-pip python-m2crypto curl wget unzip gcc swig automake make perl cpio build-essential git ntpdate vim
 	#install libsodium	
-	wget --no-check-certificate $libAddr
-	tar xf libsodium-1.0.16.tar.gz && cd libsodium-1.0.16
+	wget --no-check-certificate https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
+	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
