@@ -33,6 +33,67 @@ change_kernel(){
 	reboot now
 }
 
+
+
+Libtest(){
+	#自动选择libsodium下载节点
+	GIT='raw.githubusercontent.com'
+	LIB='download.libsodium.org'
+	GIT_PING=`ping -c 1 -w 1 $GIT|grep time=|awk '{print $7}'|sed "s/time=//"`
+	LIB_PING=`ping -c 1 -w 1 $LIB|grep time=|awk '{print $7}'|sed "s/time=//"`
+	echo "$GIT_PING $GIT" > ping.pl
+	echo "$LIB_PING $LIB" >> ping.pl
+	libAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
+	if [ "$libAddr" == "$GIT" ];then
+		libAddr='https://github.com/jedisct1/libsodium/releases/download/1.0.16/libsodium-1.0.16.tar.gz'
+	else
+		libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz'
+	fi
+	rm -f ping.pl		
+}
+
+Get_Dist_Version()
+{
+    if [ -s /usr/bin/python3 ]; then
+        Version=`/usr/bin/python3 -c 'import platform; print(platform.linux_distribution()[1][0])'`
+    elif [ -s /usr/bin/python2 ]; then
+        Version=`/usr/bin/python2 -c 'import platform; print platform.linux_distribution()[1][0]'`
+    fi
+}
+python_test(){
+	#测速决定使用哪个源
+	tsinghua='pypi.tuna.tsinghua.edu.cn'
+	pypi='mirror-ord.pypi.io'
+	doubanio='pypi.doubanio.com'
+	pubyun='pypi.pubyun.com'	
+	tsinghua_PING=`ping -c 1 -w 1 $tsinghua|grep time=|awk '{print $7}'|sed "s/time=//"`
+	pypi_PING=`ping -c 1 -w 1 $pypi|grep time=|awk '{print $7}'|sed "s/time=//"`
+	doubanio_PING=`ping -c 1 -w 1 $doubanio|grep time=|awk '{print $7}'|sed "s/time=//"`
+	pubyun_PING=`ping -c 1 -w 1 $pubyun|grep time=|awk '{print $7}'|sed "s/time=//"`
+	echo "$tsinghua_PING $tsinghua" > ping.pl
+	echo "$pypi_PING $pypi" >> ping.pl
+	echo "$doubanio_PING $doubanio" > ping.pl
+	echo "$pubyun_PING $pubyun" >> ping.pl
+	pyAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
+	if [ "$pyAddr" == "$tsinghua" ]; then
+		pyAddr='https://pypi.tuna.tsinghua.edu.cn/simple'
+	elif [ "$pyAddr" == "$pypi" ]; then
+		pyAddr='https://mirror-ord.pypi.io/simple'
+	elif [ "$pyAddr" == "$doubanio" ]; then
+		pyAddr='http://pypi.doubanio.com/simple --trusted-host pypi.doubanio.com'
+	elif [ "$pyAddr" == "$pubyun_PING" ]; then
+		pyAddr='http://pypi.pubyun.com/simple --trusted-host pypi.pubyun.com'
+	fi
+	rm -f ping.pl
+}
+source_test()
+{
+    if [ -s /usr/bin/python3 ]; then
+        answer=`/usr/bin/python3 -c 'import requests;print(requests)'`
+    elif [ -s /usr/bin/python2 ]; then
+        answer=`/usr/bin/python2 -c 'import requests;print(requests)'`
+    fi
+}
 	
 install_centos_ssr(){
 	cd /root
@@ -44,14 +105,23 @@ install_centos_ssr(){
 		wget --no-check-certificate https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 		rpm -ivh epel-release-latest-6.noarch.rpm
 	fi
-	yum -y install git gcc lsof python-devel libffi-devel openssl-devel ntpdate iptables
+	yum -y install git gcc python-setuptools lsof python-devel libffi-devel openssl-devel ntpdate iptables
 	yum -y groupinstall "Development Tools" 
-	yum -y install python-setuptools && easy_install pip==9.0.1
-	
-	pip install cymysql==0.9.4
 
-	wget --no-check-certificate https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
-	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
+	
+	pip install cymysql
+	
+	#安装 pip
+	
+	curl -O https://bootstrap.pypa.io/get-pip.py
+	python get-pip.py 
+	rm -rf *.py
+	
+	
+	pip install --upgrade pip
+	Libtest
+	wget --no-check-certificate $libAddr
+	tar xf libsodium-1.0.16.tar.gz && cd libsodium-1.0.16
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
@@ -62,25 +132,35 @@ install_centos_ssr(){
 
 	cd /root/shadowsocks
 
+	#安装requirements.txt
+	python_test
+	pip install -r requirements.txt -i $pyAddr	
+
+
+	if [ $Version == "7" ]; then
+		systemctl stop firewalld.service
+		systemctl disable firewalld.service
+		systemctl enable iptables.service
+		systemctl start iptables.service
+	fi
+	
 
 }
 install_ubuntu_ssr(){
 	apt-get -y install python python-dev python-pip python-m2crypto curl wget unzip gcc swig automake make perl cpio build-essential git ntpdate vim
 	#install libsodium	
-	wget --no-check-certificate https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
-	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
+	wget --no-check-certificate $libAddr
+	tar xf libsodium-1.0.16.tar.gz && cd libsodium-1.0.16
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
 	#install pip
 	apt-get install python-pip -y
-	pip install cymysql==0.9.4
+	pip install cymysql
 	cd /root
 	git clone -b manyuser https://github.com/glzjin/shadowsocks.git
 	cd shadowsocks
-	yum -y install python-devel
-	yum -y install libffi-devel
-	yum -y install openssl-devel
+	pip install -r requirements.txt
  
 
 }
